@@ -1,24 +1,24 @@
 using System.Text;
 using System.Text.Json;
 using Microsoft.Azure.Devices.Client;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace AzureIotSandbox.SimulatedDevice.Handlers
 {
-    public class MessageSenderHandler : IMessageSenderHandler
+    public class MessageSenderHandler : BackgroundService
     {
         private readonly DeviceClient _client;
-        private readonly ILogger<IMessageSenderHandler> _logger;
+        private readonly ILogger<MessageSenderHandler> _logger;
 
-        public MessageSenderHandler(DeviceClient client, ILogger<IMessageSenderHandler> logger)
+        public MessageSenderHandler(DeviceClient client, ILogger<MessageSenderHandler> logger)
         {
             _client = client;
             _logger = logger;
         }
 
-        public async Task Start()
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            Console.WriteLine("jioesfijop");
             _logger.LogInformation("Sendingfddsfsfd message");
             while(true)
             {

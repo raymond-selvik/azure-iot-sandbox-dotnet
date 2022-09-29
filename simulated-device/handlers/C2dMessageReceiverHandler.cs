@@ -1,24 +1,26 @@
 using System.Text;
 using Microsoft.Azure.Devices.Client;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace AzureIotSandbox.SimulatedDevice.Handlers
 {
-    public class C2dMessageReceiverHandler : IC2dMessageReceiverHandler
+    public class C2dMessageReceiverHandler : BackgroundService
     {
         private readonly DeviceClient _client;
-        private readonly ILogger<IC2dMessageReceiverHandler> _logger;
+        private readonly ILogger<C2dMessageReceiverHandler> _logger;
 
-        public C2dMessageReceiverHandler(DeviceClient client, ILogger<IC2dMessageReceiverHandler> logger)
+        public C2dMessageReceiverHandler(DeviceClient client, ILogger<C2dMessageReceiverHandler> logger)
         {
             _client = client;
             _logger = logger;
         }
 
-        public async Task Setup()
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             _logger.LogInformation("Setting up C2D handler");
             await _client.SetReceiveMessageHandlerAsync(OnC2dMessageReceived, _client);
+            await Task.CompletedTask;
         }
 
         private async Task OnC2dMessageReceived(Message message, object _)
