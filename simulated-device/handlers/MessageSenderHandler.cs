@@ -20,10 +20,16 @@ namespace AzureIotSandbox.SimulatedDevice.Handlers
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             _logger.LogInformation("Sendingfddsfsfd message");
+
+
             while(true)
             {
+                var twin = await _client.GetTwinAsync();
+                int scaler = twin.Properties.Desired["scaler"];
+                
+                var temperature = scaler * 5;
                 string messageBody = JsonSerializer.Serialize(new{
-                    temperature = 10.0,
+                    temperature = temperature,
                     id = 2
                 });
 

@@ -13,14 +13,13 @@ namespace AzureIotSandbox.SimulatedDevice
     {
         public static async Task Main(string[] args)
         {
-
             await Host.CreateDefaultBuilder(args)
                 .ConfigureServices(services =>
                 {
-                    services.AddLogging(l => l.AddConsole())
-                        .AddSingleton<DeviceClient>(c => DeviceClient.CreateFromConnectionString(""))
-                        .AddHostedService<MessageSenderHandler>()
-                        .AddHostedService<C2dMessageReceiverHandler>();
+                    services
+                        .AddLogging(l => l.AddConsole())
+                        .AddSingleton<DeviceClient>(c => DeviceClient.CreateFromConnectionString(args[0]))
+                        .AddHandlers();
                 })
                 .Build()
                 .RunAsync();
